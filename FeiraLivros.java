@@ -3,11 +3,9 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 public class FeiraLivros {
-    static TreeSet<String> livros = new TreeSet<>(); 
-    static TreeMap<String, TreeSet<String>> autores = new TreeMap<>(); 
+    static TreeMap<String, TreeSet<Livro>> autores = new TreeMap<>();
 
     public static void main(String[] args) {
-        
         Scanner scanner = new Scanner(System.in);
 
         boolean rodando = true;
@@ -20,7 +18,6 @@ public class FeiraLivros {
             System.out.print("Escolha: ");
             int opcao = scanner.nextInt();
             scanner.nextLine(); 
-
             switch (opcao) {
                 case 1:
                     cadastrarLivro(scanner);
@@ -52,18 +49,21 @@ public class FeiraLivros {
         System.out.print("Ano: ");
         int ano = scanner.nextInt();
         scanner.nextLine(); 
-        String tituloFormatado = titulo + " (" + ano + ")";
-        livros.add(tituloFormatado);
+
+        Livro livro = new Livro(titulo, autor, ano);
+
         autores.putIfAbsent(autor, new TreeSet<>());
-        autores.get(autor).add(titulo);
-        
+        autores.get(autor).add(livro);
+
         System.out.println("Livro cadastrado!");
     }
 
     static void exibirLivros() {
-        System.out.println("\nTodos os livros:");
-        for (String titulo : livros) {
-            System.out.println(titulo);
+        System.out.println("\nTodos os livros cadastrados:");
+        for (TreeSet<Livro> livrosDoAutor : autores.values()) {
+            for (Livro livro : livrosDoAutor) {
+                System.out.println(livro); 
+            }
         }
     }
 
@@ -71,8 +71,8 @@ public class FeiraLivros {
         System.out.println("\nAutores e seus livros:");
         for (String autor : autores.keySet()) {
             System.out.println(autor + ":");
-            for (String titulo : autores.get(autor)) {
-                System.out.println("- " + titulo);
+            for (Livro livro : autores.get(autor)) {
+                System.out.println("- " + livro.getTitulo() + " (" + livro.getAno() + ")");
             }
         }
     }
